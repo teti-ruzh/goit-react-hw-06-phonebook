@@ -1,7 +1,6 @@
 import { useSelector } from 'react-redux';
 import ContactItem from '../ContactItem';
-import { getContacts } from '../../redux/contactsSlice';
-import { getFilterQuery } from '../../redux/filterSlice';
+import { getContacts, getFilterQuery } from '../../redux/selectors';
 
 const getVisibleContacts = (contacts, query) => {
   return contacts.filter(({ name }) =>

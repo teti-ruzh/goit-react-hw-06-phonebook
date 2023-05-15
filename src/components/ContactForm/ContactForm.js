@@ -1,6 +1,8 @@
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addContact } from '../../redux/contactsSlice';
+import { getContacts } from '../../redux/selectors';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import css from './ContactForm.module.css';
 
 function ContactForm() {
@@ -8,6 +10,11 @@ function ContactForm() {
   const [number, setNumber] = useState('');
 
   const dispatch = useDispatch();
+  const contacts = useSelector(getContacts);
+
+  const checkDuplicate = newName => {
+    return contacts.find(({ name }) => name === newName);
+  };
 
   const handleInputChange = event => {
     const { name, value } = event.currentTarget;
@@ -27,6 +34,12 @@ function ContactForm() {
 
   const handleSubmit = event => {
     event.preventDefault();
+
+    if (checkDuplicate(name)) {
+      Notify.warning(`${name} is already in contacts`);
+      return;
+    }
+
     dispatch(addContact({ name, number }));
     reset();
   };

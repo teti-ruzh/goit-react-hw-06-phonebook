@@ -1,7 +1,6 @@
 import { createSlice, nanoid } from '@reduxjs/toolkit';
 import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 const initialState = {
   contactsArray: [],
@@ -13,13 +12,6 @@ const contactsSlice = createSlice({
   reducers: {
     addContact: {
       reducer(state, action) {
-        const checkedName = state.contactsArray.find(
-          ({ name }) => name === action.payload.name
-        );
-        if (checkedName) {
-          Notify.warning(`${action.payload.name} is already in contacts`);
-          return;
-        }
         state.contactsArray.push(action.payload);
       },
       prepare({ name, number }) {
@@ -52,5 +44,3 @@ export const contactsReducer = persistReducer(
   persistConfig,
   contactsSlice.reducer
 );
-
-export const getContacts = state => state.contacts.contactsArray;
